@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviazione Dashboard - Material 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        /* Material 3 Design Tokens */
+        :root {
+            /* Primary */
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #EADDFF;
+            --md-sys-color-on-primary-container: #21005D;
+            
+            /* Secondary */
+            --md-sys-color-secondary: #625B71;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-secondary-container: #E8DEF8;
+            --md-sys-color-on-secondary-container: #1D192B;
+            
+            /* Tertiary */
+            --md-sys-color-tertiary: #7D5260;
+            --md-sys-color-on-tertiary: #FFFFFF;
+            --md-sys-color-tertiary-container: #FFD8E4;
+            --md-sys-color-on-tertiary-container: #31111D;
+            
+            /* Surface */
+            --md-sys-color-surface: #FEF7FF;
+            --md-sys-color-on-surface: #1D1B20;
+            --md-sys-color-surface-variant: #E7E0EC;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-surface-container-lowest: #FFFFFF;
+            --md-sys-color-surface-container-low: #F7F2FA;
+            --md-sys-color-surface-container: #F3EDF7;
+            --md-sys-color-surface-container-high: #ECE6F0;
+            --md-sys-color-surface-container-highest: #E6E0E9;
+            
+            /* Outline */
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-outline-variant: #CAC4D0;
+            
+            /* State layers */
+            --md-sys-state-hover-opacity: 0.08;
+            --md-sys-state-focus-opacity: 0.12;
+            --md-sys-state-pressed-opacity: 0.12;
+            
+            /* Elevation */
+            --md-sys-elevation-1: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+            --md-sys-elevation-2: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+            --md-sys-elevation-3: 0px 1px 3px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+            
+            /* Shape */
+            --md-sys-shape-corner-none: 0px;
+            --md-sys-shape-corner-extra-small: 4px;
+            --md-sys-shape-corner-small: 8px;
+            --md-sys-shape-corner-medium: 12px;
+            --md-sys-shape-corner-large: 16px;
+            --md-sys-shape-corner-extra-large: 28px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Material 3 Top App Bar */
+        .md3-top-app-bar {
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--md-sys-elevation-2);
+        }
+
+        .md3-top-app-bar-content {
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .md3-headline {
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 28px;
+            letter-spacing: 0px;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        /* Material 3 Primary Navigation Tabs */
+        .md3-primary-nav-tabs {
+            background-color: var(--md-sys-color-surface);
+            border-bottom: 1px solid var(--md-sys-color-outline-variant);
+            display: flex;
+            justify-content: center;
+            position: sticky;
+            top: 64px;
+            z-index: 999;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .md3-primary-nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .md3-primary-nav-tabs-container {
+            display: flex;
+            max-width: 1440px;
+        }
+
+        .md3-primary-nav-tab {
+            position: relative;
+            padding: 14px 24px;
+            min-width: 90px;
+            border: none;
+            background: transparent;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            letter-spacing: 0.1px;
+            color: var(--md-sys-color-on-surface-variant);
+            cursor: pointer;
+            transition: color 0.2s cubic-bezier(0.2, 0, 0, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .md3-primary-nav-tab::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--md-sys-color-on-surface);
+            opacity: 0;
+            transition: opacity 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .md3-primary-nav-tab:hover::before {
+            opacity: var(--md-sys-state-hover-opacity);
+        }
+
+        .md3-primary-nav-tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--md-sys-color-primary);
+            transform: scaleX(0);
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .md3-primary-nav-tab.active {
+            color: var(--md-sys-color-primary);
+        }
+
+        .md3-primary-nav-tab.active::after {
+            transform: scaleX(1);
+        }
+
+        .md3-primary-nav-tab .material-icons-round {
+            font-size: 24px;
+        }
+
+        /* Material 3 Container */
+        .md3-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* Material 3 Cards - Filled */
+        .md3-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .md3-card-filled {
+            background-color: var(--md-sys-color-surface-container-highest);
+            border-radius: var(--md-sys-shape-corner-large);
+            padding: 16px;
+            transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .md3-card-filled:hover {
+            box-shadow: var(--md-sys-elevation-1);
+        }
+
+        /* Material 3 Cards - Elevated */
+        .md3-card-elevated {
+            background-color: var(--md-sys-color-surface-container-low);
+            border-radius: var(--md-sys-shape-corner-large);
+            padding: 16px;
+            box-shadow: var(--md-sys-elevation-1);
+            transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .md3-card-elevated:hover {
+            box-shadow: var(--md-sys-elevation-2);
+        }
+
+        /* Card Header */
+        .md3-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--md-sys-color-outline-variant);
+        }
+
+        .md3-icon-container {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--md-sys-shape-corner-large);
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .md3-icon-container.secondary {
+            background-color: var(--md-sys-color-tertiary-container);
+            color: var(--md-sys-color-on-tertiary-container);
+        }
+
+        .md3-card-title-area h2 {
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 28px;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 4px;
+        }
+
+        /* Material 3 Assist Chip */
+        .md3-assist-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            height: 32px;
+            border: 1px solid var(--md-sys-color-outline);
+            border-radius: var(--md-sys-shape-corner-small);
+            background-color: transparent;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.1px;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .md3-assist-chip.elevated {
+            border: none;
+            background-color: var(--md-sys-color-surface-container-low);
+            box-shadow: var(--md-sys-elevation-1);
+        }
+
+        .md3-assist-chip .material-icons-round {
+            font-size: 18px;
+        }
+
+        /* List Items */
+        .md3-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .md3-list-item {
+            background-color: var(--md-sys-color-surface-container);
+            border-radius: var(--md-sys-shape-corner-medium);
+            padding: 16px;
+            transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .md3-list-item:hover {
+            background-color: var(--md-sys-color-surface-container-high);
+        }
+
+        .md3-list-item-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .md3-list-item-header .material-icons-round {
+            font-size: 20px;
+            color: var(--md-sys-color-primary);
+        }
+
+        .md3-overline {
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .md3-title-large {
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 28px;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 4px;
+        }
+
+        .md3-body-medium {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            letter-spacing: 0.25px;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        /* Summary Cards */
+        .md3-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .md3-card-summary {
+            background: linear-gradient(135deg, var(--md-sys-color-primary) 0%, var(--md-sys-color-secondary) 100%);
+            color: var(--md-sys-color-on-primary);
+            padding: 24px;
+            border-radius: var(--md-sys-shape-corner-extra-large);
+            box-shadow: var(--md-sys-elevation-2);
+        }
+
+        .md3-card-summary h3 {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+            letter-spacing: 0.1px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .md3-card-summary p {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            letter-spacing: 0.25px;
+            opacity: 0.95;
+        }
+
+        /* Charts */
+        .md3-chart-container {
+            background-color: var(--md-sys-color-surface-container-low);
+            border-radius: var(--md-sys-shape-corner-extra-large);
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--md-sys-elevation-1);
+        }
+
+        .md3-chart-title {
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 28px;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .md3-chart-title .material-icons-round {
+            color: var(--md-sys-color-primary);
+            font-size: 28px;
+        }
+
+        /* Section Header */
+        .md3-section-header {
+            background: linear-gradient(135deg, var(--md-sys-color-primary-container) 0%, var(--md-sys-color-secondary-container) 100%);
+            padding: 24px;
+            border-radius: var(--md-sys-shape-corner-extra-large);
+            margin-bottom: 24px;
+        }
+
+        .md3-section-header h2 {
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 36px;
+            color: var(--md-sys-color-on-primary-container);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .md3-section-header p {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            letter-spacing: 0.25px;
+            color: var(--md-sys-color-on-primary-container);
+            opacity: 0.8;
+        }
+
+        /* View Management */
+        .md3-view {
+            display: none;
+            animation: fadeIn 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .md3-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .md3-top-app-bar {
+                height: 56px;
+            }
+
+            .md3-primary-nav-tabs {
+                top: 56px;
+            }
+
+            .md3-headline {
+                font-size: 18px;
+            }
+
+            .md3-cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .md3-primary-nav-tab {
+                min-width: 48px;
+                padding: 12px 16px;
+                font-size: 12px;
+            }
+
+            .md3-section-header h2 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .md3-primary-nav-tab-label {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Material 3 Top App Bar -->
+    <header class="md3-top-app-bar">
+        <div class="md3-top-app-bar-content">
+            <span class="material-icons-round" style="font-size: 28px;">dashboard</span>
+            <h1 class="md3-headline">Aviazione Dashboard</h1>
+        </div>
+    </header>
+
+    <!-- Material 3 Primary Navigation Tabs -->
+    <nav class="md3-primary-nav-tabs">
+        <div class="md3-primary-nav-tabs-container">
+            <button class="md3-primary-nav-tab active" onclick="showView('overview', this)">
+                <span class="material-icons-round">home</span>
+                <span class="md3-primary-nav-tab-label">Home</span>
+            </button>
+            <button class="md3-primary-nav-tab" onclick="showView('transport', this)">
+                <span class="material-icons-round">compare_arrows</span>
+                <span class="md3-primary-nav-tab-label">Aereo vs Auto</span>
+            </button>
+            <button class="md3-primary-nav-tab" onclick="showView('airbus', this)">
+                <span class="material-icons-round">settings</span>
+                <span class="md3-primary-nav-tab-label">A320</span>
+            </button>
+            <button class="md3-primary-nav-tab" onclick="showView('boeing', this)">
+                <span class="material-icons-round">flight</span>
+                <span class="md3-primary-nav-tab-label">737</span>
+            </button>
+            <button class="md3-primary-nav-tab" onclick="showView('embraer', this)">
+                <span class="material-icons-round">flight_takeoff</span>
+                <span class="md3-primary-nav-tab-label">E190</span>
+            </button>
+            <button class="md3-primary-nav-tab" onclick="showView('charts', this)">
+                <span class="material-icons-round">analytics</span>
+                <span class="md3-primary-nav-tab-label">Grafici</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="md3-container">
+        
+        <!-- OVERVIEW VIEW -->
+        <div id="overview-view" class="md3-view active">
+            <div class="md3-section-header">
+                <h2>
+                    <span class="material-icons-round">explore</span>
+                    Benvenuto
+                </h2>
+                <p>Esplora confronti dettagliati tra modalità di trasporto e generazioni di aeromobili</p>
+            </div>
+
+            <div class="md3-summary-grid">
+                <div class="md3-card-summary">
+                    <h3>
+                        <span class="material-icons-round">compare_arrows</span>
+                        Aereo vs Auto
+                    </h3>
+                    <p>Confronta efficienza, tempi e sostenibilità tra volo A320neo e automobile</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3>
+                        <span class="material-icons-round">flight</span>
+                        Nuove Generazioni
+                    </h3>
+                    <p>Scopri i miglioramenti tra le ultime generazioni e quelle precedenti</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3>
+                        <span class="material-icons-round">eco</span>
+                        Sostenibilità
+                    </h3>
+                    <p>Analizza riduzioni di emissioni, rumore e consumo carburante</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3>
+                        <span class="material-icons-round">analytics</span>
+                        Grafici Interattivi
+                    </h3>
+                    <p>Visualizza dati comparativi per analisi approfondite</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRANSPORT VIEW -->
+        <div id="transport-view" class="md3-view">
+            <div class="md3-section-header">
+                <h2>
+                    <span class="material-icons-round">compare_arrows</span>
+                    Aereo vs Auto
+                </h2>
+                <p>A320neo vs Toyota Yaris sullo stesso percorso</p>
+            </div>
+
+            <div class="md3-cards-grid">
+                <div class="md3-card-elevated">
+                    <div class="md3-card-header">
+                        <div class="md3-icon-container">✈️</div>
+                        <div class="md3-card-title-area">
+                            <h2>A320neo</h2>
+                            <div class="md3-assist-chip elevated">
+                                <span class="material-icons-round">emoji_events</span>
+                                Efficienza
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md3-list">
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">local_gas_station</span>
+                                <span class="md3-overline">Consumo per 100 km</span>
+                            </div>
+                            <div class="md3-title-large">~1,6 litri</div>
+                            <div class="md3-body-medium">per passeggero</div>
+                        </div>
+
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">schedule</span>
+                                <span class="md3-overline">Tempo di viaggio</span>
+                            </div>
+                            <div class="md3-title-large">~4h</div>
+                            <div class="md3-body-medium">~1h volo + 3h aeroporti</div>
+                        </div>
+
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">cloud</span>
+                                <span class="md3-overline">Emissioni CO2</span>
+                            </div>
+                            <div class="md3-title-large">Più elevate</div>
+                            <div class="md3-body-medium">quota e scia di condensazione</div>
+                        </div>
+
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">event</span>
+                                <span class="md3-overline">Flessibilità</span>
+                            </div>
+                            <div class="md3-title-large">Bassa</div>
+                            <div class="md3-body-medium">orari fissi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md3-card-elevated">
+                    <div class="md3-card-header">
+                        <div class="md3-icon-container secondary">🚗</div>
+                        <div class="md3-card-title-area">
+                            <h2>Toyota Yaris</h2>
+                            <div class="md3-assist-chip elevated">
+                                <span class="material-icons-round">eco</span>
+                                Sostenibile
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md3-list">
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">local_gas_station</span>
+                                <span class="md3-overline">Consumo per 100 km</span>
+                            </div>
+                            <div class="md3-title-large">~4,8 litri</div>
+                            <div class="md3-body-medium">solo conducente</div>
+                        </div>
+
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">schedule</span>
+                                <span class="md3-overline">Tempo di viaggio</span>
+                            </div>
+                            <div class="md3-title-large">~7h 30m</div>
+                            <div class="md3-body-medium">guida continua</div>
+                        </div>
+
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">cloud</span>
+                                <span class="md3-overline">Emissioni CO2</span>
+                            </div>
+                            <div class="md3-title-large">Più basse</div>
+                            <div class="md3-body-medium">totali complessive</div>
+                        </div>
+
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">event</span>
+                                <span class="md3-overline">Flessibilità</span>
+                            </div>
+                            <div class="md3-title-large">Alta</div>
+                            <div class="md3-body-medium">porta a porta</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md3-summary-grid">
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">lightbulb</span>Efficienza Carburante</h3>
+                    <p>L'aereo consuma il 67% in meno di carburante per passeggero su 100 km</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">speed</span>Velocità</h3>
+                    <p>L'aereo è circa il 47% più veloce includendo i tempi di aeroporto</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">eco</span>Impatto Ambientale</h3>
+                    <p>L'auto ha emissioni totali più basse grazie alla minore altitudine</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">navigation</span>Praticità</h3>
+                    <p>L'auto offre maggiore flessibilità e accesso porta a porta</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- AIRBUS VIEW -->
+        <div id="airbus-view" class="md3-view">
+            <div class="md3-section-header">
+                <h2>
+                    <span class="material-icons-round">settings</span>
+                    Airbus A320
+                </h2>
+                <p>LEAP-1A vs CFM56-5B</p>
+            </div>
+
+            <div class="md3-cards-grid">
+                <div class="md3-card-elevated">
+                    <div class="md3-card-header">
+                        <div class="md3-icon-container">🚀</div>
+                        <div class="md3-card-title-area">
+                            <h2>LEAP-1A</h2>
+                            <div class="md3-assist-chip elevated">
+                                <span class="material-icons-round">new_releases</span>
+                                Nuova Gen
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md3-list">
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">eco</span>
+                                <span class="md3-overline">Efficienza Carburante</span>
+                            </div>
+                            <div class="md3-title-large">-15%</div>
+                            <div class="md3-body-medium">rispetto al CFM56</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">cloud_off</span>
+                                <span class="md3-overline">Emissioni CO2</span>
+                            </div>
+                            <div class="md3-title-large">-15%</div>
+                            <div class="md3-body-medium">riduzione significativa</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">volume_down</span>
+                                <span class="md3-overline">Rumore</span>
+                            </div>
+                            <div class="md3-title-large">-50%</div>
+                            <div class="md3-body-medium">molto più silenzioso</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">speed</span>
+                                <span class="md3-overline">Tecnologia</span>
+                            </div>
+                            <div class="md3-title-large">Avanzata</div>
+                            <div class="md3-body-medium">pale in composito 3D</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md3-card-elevated">
+                    <div class="md3-card-header">
+                        <div class="md3-icon-container secondary">⚙️</div>
+                        <div class="md3-card-title-area">
+                            <h2>CFM56-5B</h2>
+                            <div class="md3-assist-chip elevated">
+                                <span class="material-icons-round">history</span>
+                                Consolidato
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md3-list">
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">eco</span>
+                                <span class="md3-overline">Efficienza Carburante</span>
+                            </div>
+                            <div class="md3-title-large">Standard</div>
+                            <div class="md3-body-medium">baseline di riferimento</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">verified</span>
+                                <span class="md3-overline">Affidabilità</span>
+                            </div>
+                            <div class="md3-title-large">Eccellente</div>
+                            <div class="md3-body-medium">oltre 30 anni di servizio</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">business_center</span>
+                                <span class="md3-overline">Disponibilità</span>
+                            </div>
+                            <div class="md3-title-large">Ampia</div>
+                            <div class="md3-body-medium">ricambi ovunque</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">workspace_premium</span>
+                                <span class="md3-overline">Eredità</span>
+                            </div>
+                            <div class="md3-title-large">35.000+</div>
+                            <div class="md3-body-medium">unità prodotte</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md3-summary-grid">
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">trending_down</span>Risparmio</h3>
+                    <p>Il LEAP-1A riduce il consumo del 15%: circa 1.200 litri ogni 1.000 ore</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">headphones_off</span>Rumore</h3>
+                    <p>Il LEAP taglia il rumore del 50%, migliorando comfort passeggeri</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">engineering</span>Innovazione</h3>
+                    <p>Pale in composito stampate 3D e materiali ceramici avanzati</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">workspace_premium</span>CFM56</h3>
+                    <p>Il motore a turbofan più venduto della storia aviazione</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOEING VIEW -->
+        <div id="boeing-view" class="md3-view">
+            <div class="md3-section-header">
+                <h2>
+                    <span class="material-icons-round">flight</span>
+                    Boeing 737
+                </h2>
+                <p>MAX vs NG</p>
+            </div>
+
+            <div class="md3-cards-grid">
+                <div class="md3-card-elevated">
+                    <div class="md3-card-header">
+                        <div class="md3-icon-container">✈️</div>
+                        <div class="md3-card-title-area">
+                            <h2>737 MAX</h2>
+                            <div class="md3-assist-chip elevated">
+                                <span class="material-icons-round">rocket_launch</span>
+                                Ultima Gen
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md3-list">
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">eco</span>
+                                <span class="md3-overline">Efficienza</span>
+                            </div>
+                            <div class="md3-title-large">-14%</div>
+                            <div class="md3-body-medium">consumo vs 737 NG</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">speed</span>
+                                <span class="md3-overline">Motori</span>
+                            </div>
+                            <div class="md3-title-large">LEAP-1B</div>
+                            <div class="md3-body-medium">nuova generazione</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">flight</span>
+                                <span class="md3-overline">Range</span>
+                            </div>
+                            <div class="md3-title-large">+370 km</div>
+                            <div class="md3-body-medium">autonomia estesa</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">volume_down</span>
+                                <span class="md3-overline">Rumore</span>
+                            </div>
+                            <div class="md3-title-large">-40%</div>
+                            <div class="md3-body-medium">impronta ridotta</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md3-card-elevated">
+                    <div class="md3-card-header">
+                        <div class="md3-icon-container secondary">🛩️</div>
+                        <div class="md3-card-title-area">
+                            <h2>737 NG</h2>
+                            <div class="md3-assist-chip elevated">
+                                <span class="material-icons-round">workspace_premium</span>
+                                Affidabile
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md3-list">
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">settings</span>
+                                <span class="md3-overline">Motori</span>
+                            </div>
+                            <div class="md3-title-large">CFM56-7B</div>
+                            <div class="md3-body-medium">tecnologia collaudata</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">verified</span>
+                                <span class="md3-overline">Track Record</span>
+                            </div>
+                            <div class="md3-title-large">7.000+</div>
+                            <div class="md3-body-medium">unità consegnate</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">build</span>
+                                <span class="md3-overline">Manutenzione</span>
+                            </div>
+                            <div class="md3-title-large">Consolidata</div>
+                            <div class="md3-body-medium">rete globale</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">monetization_on</span>
+                                <span class="md3-overline">Costi</span>
+                            </div>
+                            <div class="md3-title-large">Competitivi</div>
+                            <div class="md3-body-medium">ricambi disponibili</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md3-summary-grid">
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">trending_down</span>Efficienza</h3>
+                    <p>Il 737 MAX riduce i costi operativi del 14% grazie ai motori LEAP-1B</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">flight_takeoff</span>Range</h3>
+                    <p>Il MAX offre 370 km in più, aprendo nuove rotte point-to-point</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">history</span>Eredità</h3>
+                    <p>Il 737 NG resta uno degli aerei più affidabili mai costruiti</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">groups</span>Commonality</h3>
+                    <p>MAX e NG condividono l'85% della type rating piloti</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMBRAER VIEW -->
+        <div id="embraer-view" class="md3-view">
+            <div class="md3-section-header">
+                <h2>
+                    <span class="material-icons-round">flight_takeoff</span>
+                    Embraer E190
+                </h2>
+                <p>E2 vs Classic</p>
+            </div>
+
+            <div class="md3-cards-grid">
+                <div class="md3-card-elevated">
+                    <div class="md3-card-header">
+                        <div class="md3-icon-container">🛫</div>
+                        <div class="md3-card-title-area">
+                            <h2>E190-E2</h2>
+                            <div class="md3-assist-chip elevated">
+                                <span class="material-icons-round">auto_awesome</span>
+                                E2 Gen
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md3-list">
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">eco</span>
+                                <span class="md3-overline">Efficienza</span>
+                            </div>
+                            <div class="md3-title-large">-17,3%</div>
+                            <div class="md3-body-medium">vs E190 Classic</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">precision_manufacturing</span>
+                                <span class="md3-overline">Motori</span>
+                            </div>
+                            <div class="md3-title-large">PW1900G</div>
+                            <div class="md3-body-medium">P&W GTF</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">route</span>
+                                <span class="md3-overline">Range</span>
+                            </div>
+                            <div class="md3-title-large">5.278 km</div>
+                            <div class="md3-body-medium">+1.000 km vs Classic</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">volume_off</span>
+                                <span class="md3-overline">Rumore</span>
+                            </div>
+                            <div class="md3-title-large">-60%</div>
+                            <div class="md3-body-medium">riduzione drastica</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md3-card-elevated">
+                    <div class="md3-card-header">
+                        <div class="md3-icon-container secondary">✈️</div>
+                        <div class="md3-card-title-area">
+                            <h2>E190 Classic</h2>
+                            <div class="md3-assist-chip elevated">
+                                <span class="material-icons-round">star</span>
+                                Bestseller
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md3-list">
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">settings</span>
+                                <span class="md3-overline">Motori</span>
+                            </div>
+                            <div class="md3-title-large">CF34-10E</div>
+                            <div class="md3-body-medium">GE affidabili</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">flight</span>
+                                <span class="md3-overline">Range</span>
+                            </div>
+                            <div class="md3-title-large">4.260 km</div>
+                            <div class="md3-body-medium">rotte regionali</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">verified_user</span>
+                                <span class="md3-overline">Affidabilità</span>
+                            </div>
+                            <div class="md3-title-large">Provata</div>
+                            <div class="md3-body-medium">oltre 550 consegnati</div>
+                        </div>
+                        <div class="md3-list-item">
+                            <div class="md3-list-item-header">
+                                <span class="material-icons-round">handshake</span>
+                                <span class="md3-overline">Commonality</span>
+                            </div>
+                            <div class="md3-title-large">E-Jet Family</div>
+                            <div class="md3-body-medium">con E170/175/195</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md3-summary-grid">
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">battery_charging_full</span>GTF</h3>
+                    <p>I motori PW1900G dell'E2 usano tecnologia GTF rivoluzionaria</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">savings</span>Costi</h3>
+                    <p>L'E190-E2 riduce i costi di manutenzione del 25%</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">public</span>Nuove Rotte</h3>
+                    <p>Il range esteso (+1.000 km) permette collegamenti prima impossibili</p>
+                </div>
+                <div class="md3-card-summary">
+                    <h3><span class="material-icons-round">emoji_events</span>Leader</h3>
+                    <p>La famiglia E-Jet domina il mercato regionale con 1.800+ ordini</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHARTS VIEW -->
+        <div id="charts-view" class="md3-view">
+            <div class="md3-section-header">
+                <h2>
+                    <span class="material-icons-round">analytics</span>
+                    Grafici Comparativi
+                </h2>
+                <p>Visualizzazioni interattive di tutti i dati</p>
+            </div>
+
+            <div class="md3-chart-container">
+                <h3 class="md3-chart-title">
+                    <span class="material-icons-round">local_gas_station</span>
+                    Consumo Carburante
+                </h3>
+                <canvas id="fuelChart"></canvas>
+            </div>
+
+            <div class="md3-chart-container">
+                <h3 class="md3-chart-title">
+                    <span class="material-icons-round">schedule</span>
+                    Tempo Viaggio
+                </h3>
+                <canvas id="timeChart"></canvas>
+            </div>
+
+            <div class="md3-chart-container">
+                <h3 class="md3-chart-title">
+                    <span class="material-icons-round">insights</span>
+                    Analisi Aereo vs Auto
+                </h3>
+                <canvas id="radarChart"></canvas>
+            </div>
+
+            <div class="md3-chart-container">
+                <h3 class="md3-chart-title">
+                    <span class="material-icons-round">settings</span>
+                    A320: LEAP vs CFM56
+                </h3>
+                <canvas id="enginesChart"></canvas>
+            </div>
+
+            <div class="md3-chart-container">
+                <h3 class="md3-chart-title">
+                    <span class="material-icons-round">savings</span>
+                    Risparmio LEAP nel Tempo
+                </h3>
+                <canvas id="savingsChart"></canvas>
+            </div>
+
+            <div class="md3-chart-container">
+                <h3 class="md3-chart-title">
+                    <span class="material-icons-round">flight</span>
+                    737: MAX vs NG
+                </h3>
+                <canvas id="boeing737Chart"></canvas>
+            </div>
+
+            <div class="md3-chart-container">
+                <h3 class="md3-chart-title">
+                    <span class="material-icons-round">flight_takeoff</span>
+                    E190: Miglioramenti E2
+                </h3>
+                <canvas id="embraerChart"></canvas>
+            </div>
+
+            <div class="md3-chart-container">
+                <h3 class="md3-chart-title">
+                    <span class="material-icons-round">compare_arrows</span>
+                    Confronto Globale
+                </h3>
+                <canvas id="globalChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        function showView(viewName, tabElement) {
+            // Hide all views
+            document.querySelectorAll('.md3-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Remove active from all tabs
+            document.querySelectorAll('.md3-primary-nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected view
+            const selectedView = document.getElementById(viewName + '-view');
+            if (selectedView) {
+                selectedView.classList.add('active');
+            }
+            
+            // Activate selected tab
+            tabElement.classList.add('active');
+            
+            // Initialize charts if needed
+            if (viewName === 'charts' && !chartsInitialized) {
+                initCharts();
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        let chartsInitialized = false;
+
+        function initCharts() {
+            chartsInitialized = true;
+
+            const primaryColor = 'rgb(103, 80, 164)';
+            const tertiaryColor = 'rgb(125, 82, 96)';
+            const secondaryColor = 'rgb(98, 91, 113)';
+
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: { family: 'Roboto', size: 14 },
+                            color: 'rgb(29, 27, 32)'
+                        }
+                    }
+                }
+            };
+
+            // Fuel Chart
+            new Chart(document.getElementById('fuelChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['A320neo', 'Toyota Yaris'],
+                    datasets: [{
+                        label: 'Litri per 100 km',
+                        data: [1.6, 4.8],
+                        backgroundColor: [primaryColor, tertiaryColor],
+                        borderRadius: 12
+                    }]
+                },
+                options: { ...chartOptions, plugins: { legend: { display: false } } }
+            });
+
+            // Time Chart
+            new Chart(document.getElementById('timeChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Aereo (~4h)', 'Auto (7h 30m)'],
+                    datasets: [{ data: [4.0, 7.5], backgroundColor: [primaryColor, tertiaryColor] }]
+                },
+                options: chartOptions
+            });
+
+            // Radar Chart
+            new Chart(document.getElementById('radarChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Efficienza', 'Velocità', 'Sostenibilità', 'Flessibilità', 'Convenienza'],
+                    datasets: [{
+                        label: 'A320neo',
+                        data: [95, 85, 40, 30, 60],
+                        backgroundColor: 'rgba(103, 80, 164, 0.2)',
+                        borderColor: primaryColor,
+                        borderWidth: 2
+                    }, {
+                        label: 'Toyota Yaris',
+                        data: [30, 50, 90, 95, 85],
+                        backgroundColor: 'rgba(125, 82, 96, 0.2)',
+                        borderColor: tertiaryColor,
+                        borderWidth: 2
+                    }]
+                },
+                options: { ...chartOptions, scales: { r: { beginAtZero: true, max: 100 } } }
+            });
+
+            // Engines Chart
+            new Chart(document.getElementById('enginesChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Efficienza', 'Emissioni', 'Rumore', 'Manutenzione', 'Tecnologia'],
+                    datasets: [{
+                        label: 'LEAP-1A',
+                        data: [85, 85, 95, 80, 95],
+                        backgroundColor: primaryColor,
+                        borderRadius: 12
+                    }, {
+                        label: 'CFM56-5B',
+                        data: [70, 70, 45, 90, 60],
+                        backgroundColor: tertiaryColor,
+                        borderRadius: 12
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Savings Chart
+            new Chart(document.getElementById('savingsChart'), {
+                type: 'line',
+                data: {
+                    labels: ['1000h', '2000h', '3000h', '4000h', '5000h', '6000h', '7000h', '8000h'],
+                    datasets: [{
+                        label: 'Risparmio Carburante (litri)',
+                        data: [1200, 2400, 3600, 4800, 6000, 7200, 8400, 9600],
+                        backgroundColor: 'rgba(103, 80, 164, 0.1)',
+                        borderColor: primaryColor,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Boeing Chart
+            new Chart(document.getElementById('boeing737Chart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Efficienza', 'Range', 'Tecnologia', 'Rumore', 'Emissioni', 'Manutenibilità'],
+                    datasets: [{
+                        label: '737 MAX',
+                        data: [86, 85, 95, 90, 86, 80],
+                        backgroundColor: 'rgba(103, 80, 164, 0.2)',
+                        borderColor: primaryColor,
+                        borderWidth: 2
+                    }, {
+                        label: '737 NG',
+                        data: [72, 75, 70, 60, 72, 85],
+                        backgroundColor: 'rgba(125, 82, 96, 0.2)',
+                        borderColor: tertiaryColor,
+                        borderWidth: 2
+                    }]
+                },
+                options: { ...chartOptions, scales: { r: { beginAtZero: true, max: 100 } } }
+            });
+
+            // Embraer Chart
+            new Chart(document.getElementById('embraerChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Efficienza', 'Range', 'Rumore', 'Emissioni', 'Manutenzione'],
+                    datasets: [{
+                        label: 'Miglioramento E2 vs Classic (%)',
+                        data: [17.3, 23.9, 60, 17.3, 25],
+                        backgroundColor: primaryColor,
+                        borderRadius: 12
+                    }]
+                },
+                options: { ...chartOptions, plugins: { legend: { display: false } } }
+            });
+
+            // Global Chart
+            new Chart(document.getElementById('globalChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['A320neo', '737 MAX', 'E190-E2'],
+                    datasets: [{
+                        label: 'Riduzione Consumo (%)',
+                        data: [15, 14, 17.3],
+                        backgroundColor: [primaryColor, tertiaryColor, secondaryColor],
+                        borderRadius: 12
+                    }, {
+                        label: 'Riduzione Rumore (%)',
+                        data: [50, 40, 60],
+                        backgroundColor: ['rgba(103,80,164,0.5)', 'rgba(125,82,96,0.5)', 'rgba(98,91,113,0.5)'],
+                        borderRadius: 12
+                    }]
+                },
+                options: chartOptions
+            });
+        }
+    </script>
+</body>
+</html>
